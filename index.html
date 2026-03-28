@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>35days@299792458 - Ascension Tracker</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #1a0033 0%, #0d0d2b 25%, #2d0052 50%, #1a0033 75%, #0d0d2b 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px;
+            background: linear-gradient(135deg, rgba(75, 0, 130, 0.3), rgba(25, 25, 112, 0.3));
+            border-radius: 20px;
+            border: 2px solid #ff1744;
+            box-shadow: 0 0 30px rgba(255, 23, 68, 0.5);
+        }
+
+        header h1 {
+            font-size: 3em;
+            font-weight: bold;
+            background: linear-gradient(135deg, #ff1744, #b300ff, #4d7fff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(255, 23, 68, 0.5);
+        }
+
+        header p {
+            font-size: 1.2em;
+            color: #b300ff;
+            font-weight: bold;
+        }
+
+        .main-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        @media (max-width: 1024px) {
+            .main-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* STUDY SECTION - PRIMARY PRIORITY */
+        .study-section {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, rgba(75, 0, 130, 0.4), rgba(200, 0, 255, 0.3));
+            padding: 30px;
+            border-radius: 15px;
+            border: 3px solid #ff1744;
+            box-shadow: 0 0 40px rgba(255, 23, 68, 0.4), inset 0 0 20px rgba(200, 0, 255, 0.2);
+        }
+
+        .section-title {
+            font-size: 2em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #ff1744;
+            text-transform: uppercase;
+            text-shadow: 0 0 10px rgba(255, 23, 68, 0.7);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 8px;
+            height: 30px;
+            background: linear-gradient(135deg, #ff1744, #b300ff);
+            border-radius: 4px;
+        }
+
+        .study-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .study-box {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.6), rgba(25, 25, 112, 0.4));
+            padding: 20px;
+            border-radius: 12px;
+            border: 2px solid #4d7fff;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .study-box:hover {
+            transform: translateY(-5px);
+            border-color: #ff1744;
+            box-shadow: 0 5px 20px rgba(255, 23, 68, 0.4);
+        }
+
+        .study-box.completed {
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.3), rgba(0, 100, 0, 0.3));
+            border-color: #4caf50;
+        }
+
+        .study-checkbox {
+            width: 25px;
+            height: 25px;
+            margin-right: 10px;
+            cursor: pointer;
+            accent-color: #ff1744;
+        }
+
+        .study-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        .study-topic {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid #4d7fff;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 0.9em;
+            font-style: italic;
+        }
+
+        .study-topic::placeholder {
+            color: #888;
+        }
+
+        /* WORKOUT SECTION */
+        .workout-section {
+            background: linear-gradient(135deg, rgba(0, 0, 0, 0.4), rgba(25, 25, 112, 0.4));
+            padding: 30px;
+            border-radius: 15px;
+            border: 2px solid #4d7fff;
+            box-shadow: 0 0 30px rgba(77, 127, 255, 0.3);
+        }
+
+        .workout-category {
+            margin-bottom: 30px;
+        }
+
+        .category-title {
+            font-size: 1.4em;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #4d7fff;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .category-title::before {
+            content: '';
+            width: 6px;
+            height: 20px;
+            background: #4d7fff;
+            border-radius: 3px;
+        }
+
+        .checkbox-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 12px;
+        }
+
+        .checkbox-item {
+            background: linear-gradient(135deg, rgba(77, 127, 255, 0.2), rgba(25, 25, 112, 0.4));
+            padding: 15px;
+            border-radius: 10px;
+            border: 2px solid #4d7fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .checkbox-item:hover {
+            transform: scale(1.05);
+            border-color: #ff1744;
+            box-shadow: 0 0 15px rgba(255, 23, 68, 0.3);
+        }
+
+        .checkbox-item.checked {
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.4), rgba(0, 100, 0, 0.4));
+            border-color: #4caf50;
+            color: #4caf50;
+            box-shadow: 0 0 15px rgba(76, 175, 80, 0.4);
+        }
+
+        .checkbox-item input {
+            margin-right: 8px;
+            accent-color: #ff1744;
+            cursor: pointer;
+        }
+
+        /* PROGRESS SECTION */
+        .progress-section {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, rgba(75, 0, 130, 0.3), rgba(0, 0, 0, 0.5));
+            padding: 30px;
+            border-radius: 15px;
+            border: 2px solid #b300ff;
+            box-shadow: 0 0 30px rgba(179, 0, 255, 0.3);
+        }
+
+        .graph-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .graph-container {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #4d7fff;
+        }
+
+        .graph-title {
+            font-size: 1.1em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #4d7fff;
+            text-align: center;
+        }
+
+        .overall-progress {
+            grid-column: 1 / -1;
+            background: linear-gradient(135deg, rgba(255, 23, 68, 0.2), rgba(179, 0, 255, 0.2));
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #ff1744;
+        }
+
+        .overall-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #ff1744;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        /* UTILITY CLASSES */
+        .reset-btn {
+            grid-column: 1 / -1;
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #ff1744, #c41c3b);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-weight: bold;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(255, 23, 68, 0.4);
+        }
+
+        .reset-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(255, 23, 68, 0.6);
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 30px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 10px 0;
+            border: 1px solid #4d7fff;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4d7fff, #b300ff, #ff1744);
+            transition: width 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .stats-display {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-box {
+            background: rgba(0, 0, 0, 0.5);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid #4d7fff;
+            text-align: center;
+        }
+
+        .stat-label {
+            color: #888;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #ff1744;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⚔️ ASCENSION TRACKER ⚔️</h1>
+            <p>35days@299792458 - Level Up System</p>
+        </header>
+
+        <!-- STUDY SECTION - FIRST PRIORITY -->
+        <div class="study-section">
+            <div class="section-title">📚 STUDY PROTOCOL (5x MULTIPLIER)</div>
+            <div class="study-grid" id="studyGrid"></div>
+        </div>
+
+        <!-- MAIN GRID FOR WORKOUT AND PROGRESS -->
+        <div class="main-grid">
+            <!-- WORKOUT SECTION -->
+            <div class="workout-section">
+                <div class="section-title">💪 PHYSICAL TRAINING</div>
+
+                <!-- PUSHUPS -->
+                <div class="workout-category">
+                    <div class="category-title">PUSHUPS - 100 Total (20 per box)</div>
+                    <div class="checkbox-grid" id="pushupsGrid"></div>
+                </div>
+
+                <!-- PULLUPS -->
+                <div class="workout-category">
+                    <div class="category-title">PULLUPS - 30 Total (10 per box)</div>
+                    <div class="checkbox-grid" id="pullupsGrid"></div>
+                </div>
+
+                <!-- SQUATS -->
+                <div class="workout-category">
+                    <div class="category-title">SQUATS - 50 Total (25 per box)</div>
+                    <div class="checkbox-grid" id="squatsGrid"></div>
+                </div>
+            </div>
+
+            <!-- PROGRESS DISPLAY -->
+            <div class="workout-section">
+                <div class="section-title">📊 DAILY STATS</div>
+                <div class="stats-display">
+                    <div class="stat-box">
+                        <div class="stat-label">Study Hours</div>
+                        <div class="stat-value" id="studyStats">0/8</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Pushups</div>
+                        <div class="stat-value" id="pushupsStats">0/100</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Pullups</div>
+                        <div class="stat-value" id="pullupsStats">0/30</div>
+                    </div>
+                    <div class="stat-box">
+                        <div class="stat-label">Squats</div>
+                        <div class="stat-value" id="squatsStats">0/50</div>
+                    </div>
+                </div>
+                <div style="margin-top: 20px;">
+                    <div style="font-weight: bold; margin-bottom: 8px; color: #ff1744;">Overall Progress</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="overallProgressBar" style="width: 0%">0%</div>
+                    </div>
+                </div>
+                <button class="reset-btn" onclick="resetDay()">🔄 RESET DAY</button>
+            </div>
+        </div>
+
+        <!-- PROGRESS GRAPHS SECTION -->
+        <div class="progress-section">
+            <div class="section-title">📈 35-DAY PROGRESSION</div>
+            <div class="graph-grid">
+                <div class="graph-container">
+                    <div class="graph-title">Study Hours Progress</div>
+                    <canvas id="studyChart"></canvas>
+                </div>
+                <div class="graph-container">
+                    <div class="graph-title">Pushups Progress</div>
+                    <canvas id="pushupsChart"></canvas>
+                </div>
+                <div class="graph-container">
+                    <div class="graph-title">Pullups Progress</div>
+                    <canvas id="pullupsChart"></canvas>
+                </div>
+                <div class="graph-container">
+                    <div class="graph-title">Squats Progress</div>
+                    <canvas id="squatsChart"></canvas>
+                </div>
+                <div class="graph-container overall-progress">
+                    <div class="overall-title">Overall Ascension Progress (Study 5x Weighted)</div>
+                    <canvas id="overallChart"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Initialize data structure
+        const initializeData = () => {
+            const stored = localStorage.getItem('trackerData');
+            if (stored) return JSON.parse(stored);
+            
+            const data = {
+                currentDay: 1,
+                dayHistory: {}
+            };
+            
+            // Initialize 35 days
+            for (let i = 1; i <= 35; i++) {
+                data.dayHistory[i] = {
+                    study: Array(8).fill(false),
+                    studyTopics: Array(8).fill(''),
+                    pushups: Array(5).fill(false),
+                    pullups: Array(3).fill(false),
+                    squats: Array(2).fill(false)
+                };
+            }
+            
+            return data;
+        };
+
+        let trackerData = initializeData();
+
+        // Save data to localStorage
+        const saveData = () => {
+            localStorage.setItem('trackerData', JSON.stringify(trackerData));
+            updateUI();
+        };
+
+        // Create study boxes
+        const createStudyBoxes = () => {
+            const container = document.getElementById('studyGrid');
+            container.innerHTML = '';
+            const currentDayData = trackerData.dayHistory[trackerData.currentDay];
+            
+            for (let i = 0; i < 8; i++) {
+                const box = document.createElement('div');
+                box.className = `study-box ${currentDayData.study[i] ? 'completed' : ''}`;
+                
+                box.innerHTML = `
+                    <div class="study-header">
+                        <input type="checkbox" class="study-checkbox" 
+                               ${currentDayData.study[i] ? 'checked' : ''} 
+                               onchange="toggleStudy(${i})">
+                        <span>Hour ${i + 1}</span>
+                    </div>
+                    <input type="text" class="study-topic" 
+                           placeholder="Topic studied..." 
+                           value="${currentDayData.studyTopics[i]}"
+                           onchange="updateStudyTopic(${i}, this.value)">
+                `;
+                
+                container.appendChild(box);
+            }
+        };
+
+        // Create workout checkboxes
+        const createWorkoutBoxes = () => {
+            // Pushups: 5 boxes
+            const pushupsContainer = document.getElementById('pushupsGrid');
+            pushupsContainer.innerHTML = '';
+            const currentDayData = trackerData.dayHistory[trackerData.currentDay];
+            
+            for (let i = 0; i < 5; i++) {
+                const box = document.createElement('div');
+                box.className = `checkbox-item ${currentDayData.pushups[i] ? 'checked' : ''}`;
+                box.innerHTML = `
+                    <input type="checkbox" 
+                           ${currentDayData.pushups[i] ? 'checked' : ''} 
+                           onchange="togglePushup(${i})">
+                    <div>Set ${i + 1}</div>
+                    <div style="font-size: 0.8em;">20 reps</div>
+                `;
+                pushupsContainer.appendChild(box);
+            }
+
+            // Pullups: 3 boxes
+            const pullupsContainer = document.getElementById('pullupsGrid');
+            pullupsContainer.innerHTML = '';
+            
+            for (let i = 0; i < 3; i++) {
+                const box = document.createElement('div');
+                box.className = `checkbox-item ${currentDayData.pullups[i] ? 'checked' : ''}`;
+                box.innerHTML = `
+                    <input type="checkbox" 
+                           ${currentDayData.pullups[i] ? 'checked' : ''} 
+                           onchange="togglePullup(${i})">
+                    <div>Set ${i + 1}</div>
+                    <div style="font-size: 0.8em;">10 reps</div>
+                `;
+                pullupsContainer.appendChild(box);
+            }
+
+            // Squats: 2 boxes
+            const squatsContainer = document.getElementById('squatsGrid');
+            squatsContainer.innerHTML = '';
+            
+            for (let i = 0; i < 2; i++) {
+                const box = document.createElement('div');
+                box.className = `checkbox-item ${currentDayData.squats[i] ? 'checked' : ''}`;
+                box.innerHTML = `
+                    <input type="checkbox" 
+                           ${currentDayData.squats[i] ? 'checked' : ''} 
+                           onchange="toggleSquat(${i})">
+                    <div>Set ${i + 1}</div>
+                    <div style="font-size: 0.8em;">25 reps</div>
+                `;
+                squatsContainer.appendChild(box);
+            }
+        };
+
+        // Toggle functions
+        const toggleStudy = (index) => {
+            trackerData.dayHistory[trackerData.currentDay].study[index] = 
+                !trackerData.dayHistory[trackerData.currentDay].study[index];
+            saveData();
+        };
+
+        const updateStudyTopic = (index, topic) => {
+            trackerData.dayHistory[trackerData.currentDay].studyTopics[index] = topic;
+            saveData();
+        };
+
+        const togglePushup = (index) => {
+            trackerData.dayHistory[trackerData.currentDay].pushups[index] = 
+                !trackerData.dayHistory[trackerData.currentDay].pushups[index];
+            saveData();
+        };
+
+        const togglePullup = (index) => {
+            trackerData.dayHistory[trackerData.currentDay].pullups[index] = 
+                !trackerData.dayHistory[trackerData.currentDay].pullups[index];
+            saveData();
+        };
+
+        const toggleSquat = (index) => {
+            trackerData.dayHistory[trackerData.currentDay].squats[index] = 
+                !trackerData.dayHistory[trackerData.currentDay].squats[index];
+            saveData();
+        };
+
+        // Update stats display
+        const updateStats = () => {
+            const currentDayData = trackerData.dayHistory[trackerData.currentDay];
+            
+            const studyCount = currentDayData.study.filter(s => s).length;
+            const pushupsCount = currentDayData.pushups.filter(p => p).length * 20;
+            const pullupsCount = currentDayData.pullups.filter(p => p).length * 10;
+            const squatsCount = currentDayData.squats.filter(s => s).length * 25;
+            
+            document.getElementById('studyStats').textContent = `${studyCount}/8`;
+            document.getElementById('pushupsStats').textContent = `${pushupsCount}/100`;
+            document.getElementById('pullupsStats').textContent = `${pullupsCount}/30`;
+            document.getElementById('squatsStats').textContent = `${squatsCount}/50`;
+
+            // Calculate overall progress
+            const studyProgress = (studyCount / 8) * 100 * 5; // 5x multiplier
+            const exerciseProgress = ((pushupsCount + pullupsCount + squatsCount) / (100 + 30 + 50)) * 100;
+            const overallProgress = (studyProgress + exerciseProgress) / 6; // Average with study at 5x weight
+            
+            document.getElementById('overallProgressBar').style.width = Math.min(overallProgress, 100) + '%';
+            document.getElementById('overallProgressBar').textContent = Math.round(Math.min(overallProgress, 100)) + '%';
+        };
+
+        // Create charts
+        let charts = {};
+
+        const createCharts = () => {
+            const chartConfig = {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        display: false
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        max: 100,
+                        ticks: {
+                            color: '#4d7fff'
+                        },
+                        grid: {
+                            color: 'rgba(77, 127, 255, 0.1)'
+                        }
+                    },
+                    x: {
+                        ticks: {
+                            color: '#4d7fff'
+                        },
+                        grid: {
+                            color: 'rgba(77, 127, 255, 0.1)'
+                        }
+                    }
+                }
+            };
+
+            // Study Chart
+            const studyCtx = document.getElementById('studyChart').getContext('2d');
+            const studyData = Array.from({length: 35}, (_, i) => {
+                const dayData = trackerData.dayHistory[i + 1];
+                return (dayData.study.filter(s => s).length / 8) * 100;
+            });
+
+            charts.study = new Chart(studyCtx, {
+                type: 'line',
+                data: {
+                    labels: Array.from({length: 35}, (_, i) => `Day ${i + 1}`),
+                    datasets: [{
+                        label: 'Study Hours %',
+                        data: studyData,
+                        borderColor: '#ff1744',
+                        backgroundColor: 'rgba(255, 23, 68, 0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: '#ff1744',
+                        pointRadius: 4
+                    }]
+                },
+                options: chartConfig
+            });
+
+            // Pushups Chart
+            const pushupsCtx = document.getElementById('pushupsChart').getContext('2d');
+            const pushupsData = Array.from({length: 35}, (_, i) => {
+                const dayData = trackerData.dayHistory[i + 1];
+                return (dayData.pushups.filter(p => p).length * 20);
+            });
+
+            charts.pushups = new Chart(pushupsCtx, {
+                type: 'bar',
+                data: {
+                    labels: Array.from({length: 35}, (_, i) => `Day ${i + 1}`),
+                    datasets: [{
+                        label: 'Pushups',
+                        data: pushupsData,
+                        backgroundColor: '#4d7fff',
+                        borderColor: '#4d7fff',
+                        borderWidth: 2
+                    }]
+                },
+                options: chartConfig
+            });
+
+            // Pullups Chart
+            const pullupsCtx = document.getElementById('pullupsChart').getContext('2d');
+            const pullupsData = Array.from({length: 35}, (_, i) => {
+                const dayData = trackerData.dayHistory[i + 1];
+                return (dayData.pullups.filter(p => p).length * 10);
+            });
+
+            charts.pullups = new Chart(pullupsCtx, {
+                type: 'bar',
+                data: {
+                    labels: Array.from({length: 35}, (_, i) => `Day ${i + 1}`),
+                    datasets: [{
+                        label: 'Pullups',
+                        data: pullupsData,
+                        backgroundColor: '#b300ff',
+                        borderColor: '#b300ff',
+                        borderWidth: 2
+                    }]
+                },
+                options: chartConfig
+            });
+
+            // Squats Chart
+            const squatsCtx = document.getElementById('squatsChart').getContext('2d');
+            const squatsData = Array.from({length: 35}, (_, i) => {
+                const dayData = trackerData.dayHistory[i + 1];
+                return (dayData.squats.filter(s => s).length * 25);
+            });
+
+            charts.squats = new Chart(squatsCtx, {
+                type: 'bar',
+                data: {
+                    labels: Array.from({length: 35}, (_, i) => `Day ${i + 1}`),
+                    datasets: [{
+                        label: 'Squats',
+                        data: squatsData,
+                        backgroundColor: '#4caf50',
+                        borderColor: '#4caf50',
+                        borderWidth: 2
+                    }]
+                },
+                options: chartConfig
+            });
+
+            // Overall Progress Chart
+            const overallCtx = document.getElementById('overallChart').getContext('2d');
+            const overallData = Array.from({length: 35}, (_, i) => {
+                const dayData = trackerData.dayHistory[i + 1];
+                const studyCount = dayData.study.filter(s => s).length;
+                const pushupsCount = dayData.pushups.filter(p => p).length * 20;
+                const pullupsCount = dayData.pullups.filter(p => p).length * 10;
+                const squatsCount = dayData.squats.filter(s => s).length * 25;
+                
+                const studyProgress = (studyCount / 8) * 100 * 5;
+                const exerciseProgress = ((pushupsCount + pullupsCount + squatsCount) / (100 + 30 + 50)) * 100;
+                const overall = (studyProgress + exerciseProgress) / 6;
+                
+                return Math.min(overall, 100);
+            });
+
+            charts.overall = new Chart(overallCtx, {
+                type: 'line',
+                data: {
+                    labels: Array.from({length: 35}, (_, i) => `Day ${i + 1}`),
+                    datasets: [{
+                        label: 'Overall Progress',
+                        data: overallData,
+                        borderColor: '#ff1744',
+                        backgroundColor: 'rgba(255, 23, 68, 0.2)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: '#ff1744',
+                        pointRadius: 5
+                    }]
+                },
+                options: chartConfig
+            });
+        };
+
+        // Update UI
+        const updateUI = () => {
+            createStudyBoxes();
+            createWorkoutBoxes();
+            updateStats();
+            
+            // Update charts
+            Object.values(charts).forEach(chart => chart.destroy());
+            charts = {};
+            createCharts();
+        };
+
+        // Reset day
+        const resetDay = () => {
+            if (confirm('Reset today\'s data?')) {
+                trackerData.dayHistory[trackerData.currentDay] = {
+                    study: Array(8).fill(false),
+                    studyTopics: Array(8).fill(''),
+                    pushups: Array(5).fill(false),
+                    pullups: Array(3).fill(false),
+                    squats: Array(2).fill(false)
+                };
+                saveData();
+            }
+        };
+
+        // Initialize on load
+        window.addEventListener('load', () => {
+            updateUI();
+        });
+    </script>
+</body>
+</html>
